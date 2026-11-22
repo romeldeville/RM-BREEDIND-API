@@ -1,0 +1,129 @@
+spring:
+  application:
+    name: rm-breeding-api
+  profiles:
+    default: local
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/rmbreeding}
+    username: ${DB_USER:rmbreeding}
+    password: ${DB_PASSWORD:rmbreeding}
+    hikari:
+      maximum-pool-size: ${DB_POOL_SIZE:20}
+      minimum-idle: 2
+      connection-timeout: 5000
+      validation-timeout: 3000
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc.time_zone: UTC
+        format_sql: false
+        default_batch_fetch_size: 50
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: false
+  jackson:
+    default-property-inclusion: non_null
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 25MB
+  threads:
+    virtual:
+      enabled: true
+
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+  error:
+    include-message: never
+    include-stacktrace: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  tracing:
+    sampling:
+      probability: ${TRACE_SAMPLING:0.1}
+
+logging:
+  structured:
+    format:
+      console: ecs
+  pattern:
+    level: "%5p [tenant:%X{tenantId:-}] [trace:%X{traceId:-}]"
+  level:
+    root: INFO
+    com.rmbreeding: INFO
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+app:
+  jwt:
+    issuer: rm-breeding
+    access-token-ttl: 15m
+    refresh-token-ttl: 30d
+    secret: ${JWT_SECRET}
+    previous-secret: ${JWT_PREVIOUS_SECRET:}
+  cors:
+    allowed-origins: ${CORS_ORIGINS:http://localhost:4200,http://localhost:4000}
+  rate-limit:
+    enabled: ${RATE_LIMIT_ENABLED:true}
+    capacity: 120
+    refill-tokens: 120
+    refill-period: 1m
+  storage:
+    endpoint: ${S3_ENDPOINT:http://localhost:9000}
+    access-key: ${S3_ACCESS_KEY:rmbreeding}
+    secret-key: ${S3_SECRET_KEY:rmbreeding-dev}
+    bucket: ${S3_BUCKET:rm-breeding}
+    export-bucket: ${S3_EXPORT_BUCKET:rm-breeding-exports}
+    public-base-url: ${PUBLIC_BASE_URL:http://localhost:8081}
+    share-secret: ${SHARE_SECRET:local-dev-share-secret-change-me-0123456789abcdef}
+    upload-url-ttl: 15m
+    download-url-ttl: 5m
+    max-upload-bytes: 15728640
+    orphan-retention: 24h
+    deleted-retention: 7d
+    share-ttl: 7d
+    share-max-ttl: 30d
+    export-url-ttl: 15m
+  notifications:
+    push:
+      enabled: ${FCM_ENABLED:false}
+      project-id: ${FCM_PROJECT_ID:}
+      service-account-json: ${FCM_SERVICE_ACCOUNT_JSON:}
+      token-uri: ${FCM_TOKEN_URI:https://oauth2.googleapis.com/token}
+      connect-timeout: 5s
+      request-timeout: 10s
+    email:
+      enabled: ${MAIL_ENABLED:false}
+      host: ${MAIL_HOST:}
+      port: ${MAIL_PORT:587}
+      username: ${MAIL_USERNAME:}
+      password: ${MAIL_PASSWORD:}
+      from: ${MAIL_FROM:no-reply@rmbreeding.local}
+      starttls: ${MAIL_STARTTLS:true}
+      ssl: ${MAIL_SSL:false}
+    digest:
+      enabled: ${NOTIFICATION_DIGEST_ENABLED:true}
+      cron: ${NOTIFICATION_DIGEST_CRON:0 0 7 * * *}
+  idempotency:
+    ttl: 24h
+  features:
+    sync: true
+    billing: true
+    platform-admin: true

@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+  flyway:
+    clean-disabled: true
+
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+  storage:
+    endpoint: ${S3_ENDPOINT}
+    access-key: ${S3_ACCESS_KEY}
+    secret-key: ${S3_SECRET_KEY}
+    bucket: ${S3_BUCKET}
+    export-bucket: ${S3_EXPORT_BUCKET:rm-breeding-exports}
+    public-base-url: ${PUBLIC_BASE_URL:http://localhost:8081}
+    share-secret: ${SHARE_SECRET}
+  notifications:
+    push:
+      enabled: ${FCM_ENABLED:false}
+      project-id: ${FCM_PROJECT_ID:}
+      service-account-json: ${FCM_SERVICE_ACCOUNT_JSON:}
+    email:
+      enabled: ${MAIL_ENABLED:false}
+      host: ${MAIL_HOST:}
+      port: ${MAIL_PORT:587}
+      username: ${MAIL_USERNAME:}
+      password: ${MAIL_PASSWORD:}
+      from: ${MAIL_FROM:no-reply@rmbreeding.local}
+      starttls: ${MAIL_STARTTLS:true}
+      ssl: ${MAIL_SSL:false}
+
+server:
+  forward-headers-strategy: framework

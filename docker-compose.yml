@@ -1,0 +1,31 @@
+services:
+  api:
+    image: rmbreeding-api:latest
+    build:
+      context: .
+    container_name: rmbreeding-api
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:postgresql://postgres:5432/rmbreeding
+      DB_USER: rmbreeding
+      DB_PASSWORD: rmbreeding
+      JWT_SECRET: ${JWT_SECRET:-local-compose-secret-change-me-0123456789abcdef}
+      S3_ENDPOINT: http://minio:9000
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:-rmbreeding}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:-rmbreeding-dev}
+      S3_BUCKET: ${S3_BUCKET:-rm-breeding}
+      S3_EXPORT_BUCKET: ${S3_EXPORT_BUCKET:-rm-breeding-exports}
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://62.171.162.167}
+      SHARE_SECRET: ${SHARE_SECRET:-local-compose-share-secret-change-me-0123456789}
+      FCM_ENABLED: "false"
+      MAIL_ENABLED: "false"
+      CORS_ORIGINS: http://localhost,http://localhost:80,http://localhost:4000,http://localhost:4200,http://62.171.162.167
+    networks:
+      rmbreeding-net:
+        aliases:
+          - api
+
+networks:
+  rmbreeding-net:
+    external: true

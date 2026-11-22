@@ -1,0 +1,20 @@
+package com.rmbreeding.api.shared;
+
+public enum ErrorCode {
+
+    VALIDATION_FAILED,
+    UNAUTHORIZED,
+    FORBIDDEN,
+    NOT_FOUND,
+    CONFLICT,
+    BUSINESS_RULE_VIOLATION,
+    RATE_LIMITED,
+    INTERNAL_ERROR,
+    IDEMPOTENCY_KEY_REUSED,
+    TENANT_REQUIRED,
+    INVALID_CREDENTIALS,
+    LOCKED,
+    EXPIRED,
+    MFA_REQUIRED,
+    QUOTA_EXCEEDED
+}

@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/rmbreeding
+    username: rmbreeding
+    password: rmbreeding
+  jpa:
+    show-sql: false
+  flyway:
+    clean-disabled: true
+
+app:
+  jwt:
+    secret: local-dev-only-secret-change-me-0123456789abcdef
+  storage:
+    access-key: rmbreeding
+    secret-key: rmbreeding-dev
+    public-base-url: http://localhost:8081
+    share-secret: local-dev-share-secret-change-me-0123456789abcdef
+
+logging:
+  level:
+    com.rmbreeding: DEBUG
+    org.springframework.modulith: INFO
+
+server:
+  port: 8081
